@@ -80,96 +80,28 @@ http://localhost:3000/docs
 ---
 
 ## API Routes
+## Postman Screenshots
 
-### Demo Routes
+### Server is running
+![Server running](screenshots/1.png)
 
-| Method | Endpoint  | Description         |
-| ------ | --------- | ------------------- |
-| GET    | `/`       | Server health check |
-| GET    | `/hello`  | Test message        |
-| GET    | `/time`   | Current server time |
-| GET    | `/status` | Server status       |
+### Time
+![Time](screenshots/2.png)
 
----
 
-### Courses API
 
-#### Get all courses
+### Get all courses
+![Get all courses](screenshots/3.png)
 
-```
-GET /courses
-```
+### Post courses
+![Post courses](screenshots/4.png)
 
-#### Get course by ID
+### Get courses by ID
+![Get courses by ID](screenshots/5.png)
 
-```
-GET /courses/:id
-```
 
-#### Create a course
-
-```
-POST /courses
-```
-
-Body (JSON example):
-
-```json
-{
-  "title": "Intro to JavaScript",
-  "description": "Basics of JS and DOM",
-  "level": "beginner",
-  "published": false
-}
-```
-
-#### Update a course
-
-```
-PUT /courses/:id
-```
-
-Example body:
-
-```json
-{
-  "published": true
-}
-```
-
-#### Delete a course
-
-```
-DELETE /courses/:id
-```
-
-Response:
-
-```json
-{
-  "success": true
-}
-```
-
----
-
-## Data Storage
-
-All data is stored in a local file:
-
-```
-data.json
-```
-
-Example structure:
-
-```json
-{
-  "courses": []
-}
-```
-
----
+### Edit courses by ID
+![Edit courses by ID](screenshots/6.png)
 
 ## Notes
 
