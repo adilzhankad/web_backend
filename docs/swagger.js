@@ -1,4 +1,5 @@
 const swaggerJSDoc = require("swagger-jsdoc");
+const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 
@@ -8,9 +9,9 @@ module.exports = swaggerJSDoc({
     info: {
       title: "LMS API",
       version: "1.0.0",
-      description: "Simple LMS backend (JSON storage) for courses",
+      description: "Simple LMS backend (MongoDB) for courses",
     },
     servers: [{ url: `http://localhost:${PORT}` }],
   },
-  apis: ["./routes/*.js"], // читаем комменты из routes
+  apis: [path.join(__dirname, "../routes/*.js")],
 });

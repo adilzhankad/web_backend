@@ -1,5 +1,8 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
+require("dotenv").config();
+
+const { connectDB } = require("./config/db");
 
 const demoRoutes = require("./routes/demo.routes");
 const coursesRoutes = require("./routes/courses.routes");
@@ -15,9 +18,17 @@ app.use("/", demoRoutes);
 app.use("/", coursesRoutes);
 
 // docs
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", ...swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Docs available at http://localhost:${PORT}/docs`);
-});
+
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Docs available at http://localhost:${PORT}/docs`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err.message);
+    process.exit(1);
+  });
