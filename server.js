@@ -20,6 +20,9 @@ app.use("/", coursesRoutes);
 // docs
 app.use("/docs", ...swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+const cors = require("cors");
+app.use(cors({ origin: ["http://localhost:3001"], credentials: false }));
+
 
 connectDB()
   .then(() => {
