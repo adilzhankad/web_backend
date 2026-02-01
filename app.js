@@ -11,6 +11,9 @@ app.use(express.json());
 
 app.use("/", authRoutes);
 app.use("/", courseRoutes);
+const adminRoutes = require("./routes/admin.routes");
+app.use("/", adminRoutes);
+
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
