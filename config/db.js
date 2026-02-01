@@ -2,12 +2,13 @@ const mongoose = require("mongoose");
 
 async function connectDB() {
   const uri = process.env.MONGO_URI;
-  if (!uri) throw new Error("MONGO_URI is not set in .env");
 
-  mongoose.set("strictQuery", true);
+  if (!uri) {
+    throw new Error("MONGO_URI is not defined in .env");
+  }
 
   await mongoose.connect(uri);
-  console.log("MongoDB connected");
+  console.log(" MongoDB connected (Atlas)");
 }
 
 module.exports = { connectDB };

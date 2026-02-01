@@ -1,34 +1,13 @@
-const express = require("express");
-const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
-
+const app = require("./app");
 const { connectDB } = require("./config/db");
 
-const demoRoutes = require("./routes/demo.routes");
-const coursesRoutes = require("./routes/courses.routes");
-const swaggerSpec = require("./docs/swagger");
-
-const app = express();
-app.use(express.json());
-
 const PORT = process.env.PORT || 3000;
-
-// routes
-app.use("/", demoRoutes);
-app.use("/", coursesRoutes);
-
-// docs
-app.use("/docs", ...swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-const cors = require("cors");
-app.use(cors({ origin: ["http://localhost:3001"], credentials: false }));
-
 
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
-      console.log(`Docs available at http://localhost:${PORT}/docs`);
     });
   })
   .catch((err) => {
