@@ -26,6 +26,51 @@ router.get('/courses', studentCtrl.getAvailableCourses);
 
 /**
  * @swagger
+ * /api/student/my-courses:
+ *   get:
+ *     summary: Get enrolled courses (student)
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get('/my-courses', requireRole('student'), studentCtrl.getMyCourses);
+
+/**
+ * @swagger
+ * /api/student/courses/{courseId}/lessons:
+ *   get:
+ *     summary: Get published lessons for an enrolled course (student)
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.get('/courses/:courseId/lessons', requireRole('student'), studentCtrl.getCourseLessons);
+
+/**
+ * @swagger
+ * /api/student/courses/{courseId}/assignments:
+ *   get:
+ *     summary: Get published assignments for an enrolled course (student)
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.get('/courses/:courseId/assignments', requireRole('student'), studentCtrl.getCourseAssignments);
+
+/**
+ * @swagger
  * /api/student/courses/{courseId}/enroll:
  *   post:
  *     summary: Enroll in a course (student)

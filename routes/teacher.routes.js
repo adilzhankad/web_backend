@@ -17,6 +17,17 @@ router.use(auth, requireRole(['teacher', 'admin']));
 /**
  * @swagger
  * /api/teacher/courses:
+ *   get:
+ *     summary: List teacher courses (teacher/admin)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get('/courses', teacherCtrl.getMyCourses);
+
+/**
+ * @swagger
+ * /api/teacher/courses:
  * post:
  * summary: Create course (teacher/admin)
  * tags: [Teacher]
@@ -56,6 +67,23 @@ router.post('/courses/:courseId/lessons', teacherCtrl.addLesson);
  * tags: [Teacher]
  */
 router.post('/courses/:courseId/assignments', teacherCtrl.createAssignment);
+
+/**
+ * @swagger
+ * /api/teacher/courses/{courseId}/submissions:
+ *   get:
+ *     summary: List submissions for a course (teacher/admin)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.get('/courses/:courseId/submissions', teacherCtrl.listCourseSubmissions);
 
 /**
  * @swagger
