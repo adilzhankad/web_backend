@@ -7,7 +7,9 @@ const Submission = require('../models/Submission');
 
 exports.getAvailableCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ published: true }).populate('teacherId', 'fullName email');
+    const includeUnpublished = String(req.query.includeUnpublished || 'false') === 'true';
+    const filter = includeUnpublished ? {} : { published: true };
+    const courses = await Course.find(filter).populate('teacherId', 'fullName email');
     res.json(courses);
   } catch (err) {
     res.status(500).json({ error: "Ошибка сервера" });

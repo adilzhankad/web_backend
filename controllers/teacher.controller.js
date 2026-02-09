@@ -18,12 +18,24 @@ exports.getMyCourses = async (req, res) => {
 // 1. Создание курса
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, level } = req.body;
+    const { title, description, level, published, teacherId } = req.body;
+
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!title) {
+      return res.status(400).json({ error: 'title is required' });
+    }
+
+    const isAdmin = req.user && req.user.role === 'admin';
+    const resolvedTeacherId = isAdmin && teacherId ? teacherId : req.user.id;
     const course = await Course.create({
       title,
       description: description || "",
-      level: level ? level.toLowerCase() : 'beginner',
-      teacherId: req.user.id 
+      level: level ? String(level).toLowerCase() : 'beginner',
+      published: typeof published === 'boolean' ? published : true,
+      teacherId: resolvedTeacherId,
     });
     res.status(201).json(course);
   } catch (err) {

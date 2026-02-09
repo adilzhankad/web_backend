@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
   res.send('LMS API is running. Go to /api-docs for documentation.');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📖 Documentation available at http://localhost:${PORT}/api-docs`);
