@@ -1,17 +1,22 @@
-const swaggerJSDoc = require("swagger-jsdoc");
-const path = require("path");
-
-const PORT = process.env.PORT || 3000;
-
-module.exports = swaggerJSDoc({
+// docs/swagger.js
+const swaggerOptions = {
   definition: {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      title: "LMS API",
-      version: "1.0.0",
-      description: "Simple LMS backend (MongoDB) for courses",
+      title: 'LMS API',
+      version: '1.0.0',
     },
-    servers: [{ url: `http://localhost:${PORT}` }],
+    // Убедитесь, что здесь теги тоже оформлены правильно, если они есть
+    tags: [
+      {
+        name: 'Teacher',
+        description: 'Teacher endpoints',
+      },
+      {
+        name: 'Courses',
+        description: 'Courses endpoints',
+      },
+    ],
   },
-  apis: [path.join(__dirname, "../routes/*.js")],
-});
+  apis: ['./routes/*.js'], // пути к файлам с роутами
+};

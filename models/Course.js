@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const courseSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true, trim: true },
-    description: { type: String, required: true, trim: true },
-    level: { type: String, required: true, trim: true }, 
-    published: { type: Boolean, default: false },
-  },
-  { timestamps: true } 
-);
+const courseSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: String,
+  teacherId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  category: String,
+  level: { type: String, enum: ['beginner', 'intermediate', 'advanced'], default: 'beginner' },
+  published: { type: Boolean, default: false }
+}, { timestamps: true });
 
-module.exports = mongoose.model("Course", courseSchema);
+module.exports = mongoose.model('Course', courseSchema);
