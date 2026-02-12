@@ -47,13 +47,44 @@ exports.createCourse = async (req, res) => {
 exports.addLesson = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const { title, content, order } = req.body;
+    const { title, content, videoUrl, order, isPublished } = req.body;
 
-    const course = await Course.findOne({ _id: courseId, teacherId: req.user.id });
-    if (!course) return res.status(403).json({ error: "Вы не являетесь владельцем этого курса" });
+    if (!title) {
+      return res.status(400).json({ error: 'title is required' });
+    }
 
-    const lesson = await Lesson.create({ courseId, title, content, order });
+    const isAdmin = req.user && req.user.role === 'admin';
+    const course = await Course.findOne(isAdmin ? { _id: courseId } : { _id: courseId, teacherId: req.user.id });
+    if (!course) {
+      return res.status(403).json({ error: 'Вы не являетесь владельцем этого курса' });
+    }
+
+    const lesson = await Lesson.create({
+      courseId,
+      title,
+      content,
+      videoUrl,
+      order,
+      isPublished,
+    });
     res.status(201).json(lesson);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.listCourseLessons = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const isAdmin = req.user && req.user.role === 'admin';
+    const course = await Course.findOne(isAdmin ? { _id: courseId } : { _id: courseId, teacherId: req.user.id });
+    if (!course) {
+      return res.status(403).json({ error: 'Вы не являетесь владельцем этого курса' });
+    }
+
+    const lessons = await Lesson.find({ courseId }).sort({ order: 1, createdAt: 1 });
+    res.json(lessons);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -84,6 +115,23 @@ exports.createAssignment = async (req, res) => {
       isPublished,
     });
     res.status(201).json(assignment);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.listCourseAssignments = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const isAdmin = req.user && req.user.role === 'admin';
+    const course = await Course.findOne(isAdmin ? { _id: courseId } : { _id: courseId, teacherId: req.user.id });
+    if (!course) {
+      return res.status(403).json({ error: 'Вы не являетесь владельцем этого курса' });
+    }
+
+    const assignments = await Assignment.find({ courseId }).sort({ createdAt: -1 });
+    res.json(assignments);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

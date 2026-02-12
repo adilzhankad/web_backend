@@ -71,6 +71,23 @@ router.get('/courses/:courseId/assignments', requireRole('student'), studentCtrl
 
 /**
  * @swagger
+ * /api/student/courses/{courseId}/submissions:
+ *   get:
+ *     summary: Get my submissions (with grades) for a course (student)
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.get('/courses/:courseId/submissions', requireRole('student'), studentCtrl.getMyCourseSubmissions);
+
+/**
+ * @swagger
  * /api/student/courses/{courseId}/enroll:
  *   post:
  *     summary: Enroll in a course (student)

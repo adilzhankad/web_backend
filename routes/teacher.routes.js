@@ -53,19 +53,27 @@ router.delete('/courses/:courseId', teacherCtrl.deleteCourse);
 /**
  * @swagger
  * /api/teacher/courses/{courseId}/lessons:
- * post:
- * summary: Add lesson to course (teacher/admin)
- * tags: [Teacher]
+ *   get:
+ *     summary: List lessons for course (teacher/admin)
+ *     tags: [Teacher]
+ *   post:
+ *     summary: Add lesson to course (teacher/admin)
+ *     tags: [Teacher]
  */
+router.get('/courses/:courseId/lessons', teacherCtrl.listCourseLessons);
 router.post('/courses/:courseId/lessons', teacherCtrl.addLesson);
 
 /**
  * @swagger
  * /api/teacher/courses/{courseId}/assignments:
- * post:
- * summary: Create assignment (teacher/admin)
- * tags: [Teacher]
+ *   get:
+ *     summary: List assignments for course (teacher/admin)
+ *     tags: [Teacher]
+ *   post:
+ *     summary: Create assignment (teacher/admin)
+ *     tags: [Teacher]
  */
+router.get('/courses/:courseId/assignments', teacherCtrl.listCourseAssignments);
 router.post('/courses/:courseId/assignments', teacherCtrl.createAssignment);
 
 /**

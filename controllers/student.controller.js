@@ -36,9 +36,9 @@ exports.getCourseLessons = async (req, res) => {
   try {
     const { courseId } = req.params;
 
-    const enrollment = await Enrollment.findOne({ userId: req.user.id, courseId });
-    if (!enrollment) {
-      return res.status(403).json({ error: 'Доступ запрещен. Вы не записаны на этот курс' });
+    const course = await Course.findById(courseId);
+    if (!course || !course.published) {
+      return res.status(404).json({ error: 'Курс не найден' });
     }
 
     const lessons = await Lesson.find({ courseId, isPublished: true }).sort({ order: 1 });
@@ -52,13 +52,38 @@ exports.getCourseAssignments = async (req, res) => {
   try {
     const { courseId } = req.params;
 
-    const enrollment = await Enrollment.findOne({ userId: req.user.id, courseId });
-    if (!enrollment) {
-      return res.status(403).json({ error: 'Доступ запрещен. Вы не записаны на этот курс' });
+    const course = await Course.findById(courseId);
+    if (!course || !course.published) {
+      return res.status(404).json({ error: 'Курс не найден' });
     }
 
     const assignments = await Assignment.find({ courseId, isPublished: true }).sort({ createdAt: -1 });
     res.json(assignments);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getMyCourseSubmissions = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const course = await Course.findById(courseId);
+    if (!course || !course.published) {
+      return res.status(404).json({ error: 'Курс не найден' });
+    }
+
+    const assignments = await Assignment.find({ courseId }).select('_id');
+    const assignmentIds = assignments.map((a) => a._id);
+
+    const submissions = await Submission.find({
+      studentId: req.user.id,
+      assignmentId: { $in: assignmentIds },
+    })
+      .select('assignmentId score feedback createdAt updatedAt')
+      .sort({ createdAt: -1 });
+
+    res.json(submissions);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
